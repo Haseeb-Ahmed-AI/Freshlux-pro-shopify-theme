@@ -1,0 +1,72 @@
+{%- comment -%}
+  Main Register Section
+  Customer registration form
+{%- endcomment -%}
+
+<section class="register-page section">
+  <div class="page-width">
+    <div class="register-page__wrapper">
+      <h1>{{ 'customer.register.title' | t }}</h1>
+
+      {%- form 'create_customer', class: 'register-form' -%}
+        {%- if form.errors -%}
+          <div class="form-errors">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="form-group">
+          <label for="FirstName" class="form-label">{{ 'customer.register.first_name' | t }}</label>
+          <input type="text" id="FirstName" name="customer[first_name]" class="form-input" autocomplete="given-name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="LastName" class="form-label">{{ 'customer.register.last_name' | t }}</label>
+          <input type="text" id="LastName" name="customer[last_name]" class="form-input" autocomplete="family-name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="Email" class="form-label">{{ 'customer.register.email' | t }}</label>
+          <input type="email" id="Email" name="customer[email]" class="form-input" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="Password" class="form-label">{{ 'customer.register.password' | t }}</label>
+          <input type="password" id="Password" name="customer[password]" class="form-input" autocomplete="new-password" required>
+        </div>
+
+        <button type="submit" class="button button--primary button--full">{{ 'customer.register.submit' | t }}</button>
+      {%- endform -%}
+
+      <p class="register-page__login">
+        {{ 'customer.register.have_account' | t }}
+        <a href="{{ routes.account_login_url }}">{{ 'customer.register.login' | t }}</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .register-page__wrapper {
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  .register-page__wrapper h1 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .register-page__login {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+    font-size: 1.4rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Register",
+  "class": "section-register"
+}
+{% endschema %}

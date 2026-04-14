@@ -1,0 +1,628 @@
+{%- comment -%}
+  Header Section with Mega Menu
+  Premium header with logo, navigation, search, account, and cart
+{%- endcomment -%}
+
+<header class="header" data-header>
+  <div class="header__announcement{% if section.settings.show_announcement == false %} hidden{% endif %}">
+    <div class="page-width">
+      <p class="header__announcement-text">{{ section.settings.announcement_text }}</p>
+    </div>
+  </div>
+
+  <div class="header__main">
+    <div class="page-width">
+      <div class="header__wrapper">
+        {%- comment -%} Mobile menu toggle {%- endcomment -%}
+        <button type="button" class="header__menu-toggle hidden-desktop" data-mobile-menu-open aria-label="{{ 'accessibility.menu' | t }}">
+          {%- render 'icon-menu' -%}
+        </button>
+
+        {%- comment -%} Logo {%- endcomment -%}
+        <div class="header__logo">
+          <a href="{{ routes.root_url }}" class="header__logo-link">
+            {%- if settings.logo != blank -%}
+              <img
+                src="{{ settings.logo | image_url: width: settings.logo_width | times: 2 }}"
+                alt="{{ shop.name }}"
+                width="{{ settings.logo_width }}"
+                height="{{ settings.logo_width | divided_by: settings.logo.aspect_ratio }}"
+                loading="eager"
+              >
+            {%- else -%}
+              <span class="header__logo-text">{{ shop.name }}</span>
+            {%- endif -%}
+          </a>
+        </div>
+
+        {%- comment -%} Desktop Navigation {%- endcomment -%}
+        <nav class="header__nav hidden-mobile" role="navigation" aria-label="{{ 'accessibility.main_navigation' | t }}">
+          <ul class="header__nav-list">
+            {%- for link in section.settings.menu.links -%}
+              <li class="header__nav-item{% if link.links != blank %} has-dropdown{% endif %}" data-mega-menu>
+                {%- if link.links != blank -%}
+                  <button type="button" class="header__nav-link" data-mega-menu-trigger aria-expanded="false">
+                    {{ link.title }}
+                    {%- render 'icon-chevron-down' -%}
+                  </button>
+
+                  {%- comment -%} Mega Menu Dropdown {%- endcomment -%}
+                  <div class="mega-menu" data-mega-menu-content>
+                    <div class="mega-menu__wrapper page-width">
+                      <div class="mega-menu__columns">
+                        {%- for child_link in link.links -%}
+                          <div class="mega-menu__column">
+                            <h3 class="mega-menu__title">
+                              <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                            </h3>
+                            {%- if child_link.links != blank -%}
+                              <ul class="mega-menu__links">
+                                {%- for grandchild_link in child_link.links -%}
+                                  <li>
+                                    <a href="{{ grandchild_link.url }}" class="mega-menu__link">
+                                      {{ grandchild_link.title }}
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- endif -%}
+                          </div>
+                        {%- endfor -%}
+
+                        {%- comment -%} Featured Product in Mega Menu {%- endcomment -%}
+                        {%- if section.settings.show_mega_menu_featured -%}
+                          <div class="mega-menu__featured">
+                            {%- if section.settings.mega_menu_image != blank -%}
+                              <div class="mega-menu__featured-image">
+                                <img
+                                  src="{{ section.settings.mega_menu_image | image_url: width: 400 }}"
+                                  alt="{{ section.settings.mega_menu_title | escape }}"
+                                  loading="lazy"
+                                >
+                              </div>
+                            {%- endif -%}
+                            <div class="mega-menu__featured-content">
+                              <h4>{{ section.settings.mega_menu_title }}</h4>
+                              <p>{{ section.settings.mega_menu_text }}</p>
+                              {%- if section.settings.mega_menu_link != blank -%}
+                                <a href="{{ section.settings.mega_menu_link }}" class="button button--secondary button--small">
+                                  {{ section.settings.mega_menu_link_text | default: 'Shop Now' }}
+                                </a>
+                              {%- endif -%}
+                            </div>
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
+                {%- else -%}
+                  <a href="{{ link.url }}" class="header__nav-link">{{ link.title }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+
+        {%- comment -%} Header Icons {%- endcomment -%}
+        <div class="header__icons">
+          <button type="button" class="header__icon" data-search-open aria-label="{{ 'accessibility.search' | t }}">
+            {%- render 'icon-search' -%}
+          </button>
+
+          <a href="{{ routes.account_url }}" class="header__icon" aria-label="{{ 'accessibility.account' | t }}">
+            {%- render 'icon-user' -%}
+          </a>
+
+          <button type="button" class="header__icon header__cart" data-cart-trigger aria-label="{{ 'accessibility.cart' | t }}">
+            {%- render 'icon-cart' -%}
+            <span class="header__cart-count{% if cart.item_count == 0 %} hidden{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile Menu Drawer {%- endcomment -%}
+<div class="overlay" data-mobile-menu-overlay></div>
+<div class="drawer drawer--left mobile-menu" data-mobile-menu>
+  <div class="drawer__header">
+    <h2 class="drawer__title">{{ 'accessibility.menu' | t }}</h2>
+    <button type="button" class="drawer__close" data-mobile-menu-close aria-label="{{ 'accessibility.close' | t }}">
+      {%- render 'icon-close' -%}
+    </button>
+  </div>
+  <div class="drawer__body">
+    <nav class="mobile-menu__nav" role="navigation">
+      <ul class="mobile-menu__list">
+        {%- for link in section.settings.menu.links -%}
+          <li class="mobile-menu__item">
+            {%- if link.links != blank -%}
+              <button type="button" class="mobile-menu__link" data-mobile-submenu-toggle>
+                {{ link.title }}
+                {%- render 'icon-chevron-down' -%}
+              </button>
+              <ul class="mobile-menu__submenu">
+                {%- for child_link in link.links -%}
+                  <li>
+                    <a href="{{ child_link.url }}" class="mobile-menu__sublink">{{ child_link.title }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- else -%}
+              <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="mobile-menu__footer">
+      <a href="{{ routes.account_url }}" class="mobile-menu__account">
+        {%- render 'icon-user' -%}
+        <span>{{ 'customer.account.title' | t }}</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Search Drawer {%- endcomment -%}
+<div class="overlay" data-search-overlay></div>
+<div class="drawer search-drawer" data-search-drawer>
+  <div class="drawer__header">
+    <h2 class="drawer__title">{{ 'general.search.title' | t }}</h2>
+    <button type="button" class="drawer__close" data-search-close aria-label="{{ 'accessibility.close' | t }}">
+      {%- render 'icon-close' -%}
+    </button>
+  </div>
+  <div class="drawer__body">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-drawer__form">
+      <div class="search-drawer__input-wrapper">
+        {%- render 'icon-search' -%}
+        <input
+          type="search"
+          name="q"
+          class="search-drawer__input"
+          placeholder="{{ 'general.search.placeholder' | t }}"
+          data-search-input
+          autocomplete="off"
+        >
+      </div>
+      <input type="hidden" name="type" value="product">
+    </form>
+    <div class="search-drawer__results" data-search-results></div>
+  </div>
+</div>
+
+{%- comment -%} Cart Drawer {%- endcomment -%}
+{%- render 'cart-drawer' -%}
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--color-background);
+  }
+
+  .header__announcement {
+    background-color: var(--color-primary);
+    color: #fff;
+    padding: var(--spacing-sm) 0;
+    text-align: center;
+  }
+
+  .header__announcement-text {
+    margin: 0;
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .header__main {
+    border-bottom: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  .header__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    height: var(--header-height);
+  }
+
+  .header__menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    color: var(--color-foreground);
+  }
+
+  .header__logo {
+    flex-shrink: 0;
+  }
+
+  .header__logo-link {
+    display: block;
+  }
+
+  .header__logo-text {
+    font-family: var(--font-heading-family);
+    font-size: 2.4rem;
+    font-weight: var(--font-heading-weight);
+    color: var(--color-foreground);
+  }
+
+  .header__nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+  }
+
+  .header__nav-item {
+    position: relative;
+  }
+
+  .header__nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-foreground);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .header__nav-link:hover {
+    color: var(--color-primary);
+  }
+
+  .header__nav-link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .header__nav-item:hover .header__nav-link svg {
+    transform: rotate(180deg);
+  }
+
+  .header__icons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .header__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .header__icon:hover {
+    color: var(--color-primary);
+  }
+
+  .header__cart {
+    position: relative;
+  }
+
+  .header__cart-count {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--color-secondary);
+    border-radius: var(--border-radius-full);
+  }
+
+  /* Mega Menu */
+  .mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    max-width: var(--page-width);
+    background-color: #fff;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+    z-index: 100;
+  }
+
+  .mega-menu.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mega-menu__wrapper {
+    padding: var(--spacing-xl);
+  }
+
+  .mega-menu__columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .mega-menu__title {
+    margin-bottom: var(--spacing-md);
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .mega-menu__title a {
+    color: var(--color-foreground);
+  }
+
+  .mega-menu__title a:hover {
+    color: var(--color-primary);
+  }
+
+  .mega-menu__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .mega-menu__link {
+    font-size: 1.4rem;
+    color: rgba(var(--color-foreground-rgb), 0.7);
+    transition: color var(--transition-fast);
+  }
+
+  .mega-menu__link:hover {
+    color: var(--color-primary);
+  }
+
+  .mega-menu__featured {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: rgba(var(--color-primary-rgb), 0.05);
+    border-radius: var(--border-radius-md);
+  }
+
+  .mega-menu__featured-image img {
+    width: 100%;
+    border-radius: var(--border-radius-sm);
+  }
+
+  .mega-menu__featured h4 {
+    margin: 0 0 var(--spacing-xs);
+    font-size: 1.6rem;
+  }
+
+  .mega-menu__featured p {
+    margin: 0 0 var(--spacing-md);
+    font-size: 1.4rem;
+    color: rgba(var(--color-foreground-rgb), 0.7);
+  }
+
+  /* Mobile Menu */
+  .mobile-menu__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-menu__item {
+    border-bottom: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  .mobile-menu__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--spacing-md);
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+    background: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mobile-menu__link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .mobile-menu__link.is-active svg {
+    transform: rotate(180deg);
+  }
+
+  .mobile-menu__submenu {
+    display: none;
+    padding-left: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+  }
+
+  .mobile-menu__submenu.is-active {
+    display: block;
+  }
+
+  .mobile-menu__sublink {
+    display: block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1.4rem;
+    color: rgba(var(--color-foreground-rgb), 0.7);
+  }
+
+  .mobile-menu__footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  .mobile-menu__account {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-foreground);
+  }
+
+  /* Search Drawer */
+  .search-drawer__form {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .search-drawer__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border: 1px solid rgba(var(--color-foreground-rgb), 0.2);
+    border-radius: var(--border-radius-md);
+  }
+
+  .search-drawer__input {
+    flex-grow: 1;
+    border: none;
+    font-size: 1.6rem;
+    background: transparent;
+    outline: none;
+  }
+/* =========================
+   Mobile Header Fix
+========================= */
+/* =========================
+   Mobile Header – Proper Icon Layout
+========================= */
+@media screen and (max-width: 749px) {
+  .header__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    height: auto;
+    padding: 0.5rem 0;
+  }
+
+  .header__menu-toggle {
+    flex: 0 0 44px;
+  }
+
+  .header__logo {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header__logo img {
+    max-width: 120px;
+    height: auto;
+  }
+
+  .header__icons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .header__icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Free delivery on orders over $50 | Fresh produce delivered daily"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Mega Menu Featured"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mega_menu_featured",
+      "label": "Show featured section in mega menu",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_menu_image",
+      "label": "Featured image"
+    },
+    {
+      "type": "text",
+      "id": "mega_menu_title",
+      "label": "Featured title",
+      "default": "Fresh Arrivals"
+    },
+    {
+      "type": "textarea",
+      "id": "mega_menu_text",
+      "label": "Featured text",
+      "default": "Discover our latest selection of premium produce."
+    },
+    {
+      "type": "url",
+      "id": "mega_menu_link",
+      "label": "Featured link"
+    },
+    {
+      "type": "text",
+      "id": "mega_menu_link_text",
+      "label": "Featured link text",
+      "default": "Shop Now"
+    }
+  ]
+}
+{% endschema %}

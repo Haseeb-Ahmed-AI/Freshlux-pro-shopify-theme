@@ -1,0 +1,250 @@
+{% doc %}
+  @prompt
+    Create a custom code snippet that enables autoplay for background videos in the hero banner section. The code should automatically detect video elements in the hero banner and add autoplay, muted, loop, and playsinline attributes to ensure the video plays automatically on page load across all browsers and devices. The solution should be lightweight and work with the existing hero banner structure.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-video-autoplay-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+  }
+
+  .ai-video-autoplay__message-{{ ai_gen_id }} {
+    padding: 20px;
+    background-color: {{ block.settings.message_bg_color }};
+    color: {{ block.settings.message_text_color }};
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .ai-video-autoplay__status-{{ ai_gen_id }} {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: {{ block.settings.status_color }};
+    margin-right: 8px;
+    animation: ai-video-autoplay-pulse-{{ ai_gen_id }} 2s ease-in-out infinite;
+  }
+
+  @keyframes ai-video-autoplay-pulse-{{ ai_gen_id }} {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .ai-video-autoplay__info-{{ ai_gen_id }} {
+    margin-top: 10px;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+{% endstyle %}
+
+<video-autoplay-enabler-{{ ai_gen_id }}
+  class="ai-video-autoplay-{{ ai_gen_id }}"
+  data-target-selector="{{ block.settings.target_selector }}"
+  data-enable-controls="{{ block.settings.enable_controls }}"
+  data-show-status="{{ block.settings.show_status }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.show_status %}
+    <div class="ai-video-autoplay__message-{{ ai_gen_id }}">
+      <span class="ai-video-autoplay__status-{{ ai_gen_id }}"></span>
+      <span class="ai-video-autoplay__text-{{ ai_gen_id }}">Video autoplay enabled</span>
+      <div class="ai-video-autoplay__info-{{ ai_gen_id }}">
+        Targeting: {{ block.settings.target_selector }}
+      </div>
+    </div>
+  {% endif %}
+</video-autoplay-enabler-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class VideoAutoplayEnabler{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.targetSelector = this.dataset.targetSelector || '.hero-banner video, [class*="hero"] video, [class*="banner"] video';
+        this.enableControls = this.dataset.enableControls === 'true';
+        this.showStatus = this.dataset.showStatus === 'true';
+        this.processedVideos = new Set();
+      }
+
+      connectedCallback() {
+        this.enableVideoAutoplay();
+        this.observeNewVideos();
+      }
+
+      enableVideoAutoplay() {
+        const videos = document.querySelectorAll(this.targetSelector);
+        
+        videos.forEach((video) => {
+          if (this.processedVideos.has(video)) {
+            return;
+          }
+
+          video.setAttribute('autoplay', '');
+          video.setAttribute('muted', '');
+          video.setAttribute('loop', '');
+          video.setAttribute('playsinline', '');
+          
+          if (!this.enableControls) {
+            video.removeAttribute('controls');
+          }
+
+          video.muted = true;
+          video.playsInline = true;
+          video.loop = true;
+
+          const playVideo = () => {
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+              playPromise.then(() => {
+                this.processedVideos.add(video);
+                this.updateStatus(true);
+              }).catch((error) => {
+                console.warn('Video autoplay failed:', error);
+                this.updateStatus(false);
+              });
+            }
+          };
+
+          if (video.readyState >= 3) {
+            playVideo();
+          } else {
+            video.addEventListener('loadeddata', playVideo, { once: true });
+          }
+
+          video.addEventListener('pause', () => {
+            if (!video.ended) {
+              video.play().catch(() => {});
+            }
+          });
+
+          this.processedVideos.add(video);
+        });
+
+        if (videos.length > 0 && this.showStatus) {
+          this.updateStatusText(videos.length);
+        }
+      }
+
+      observeNewVideos() {
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === 1) {
+                if (node.tagName === 'VIDEO' && node.matches(this.targetSelector)) {
+                  this.enableVideoAutoplay();
+                } else if (node.querySelector) {
+                  const videos = node.querySelectorAll(this.targetSelector);
+                  if (videos.length > 0) {
+                    this.enableVideoAutoplay();
+                  }
+                }
+              }
+            });
+          });
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      }
+
+      updateStatus(success) {
+        if (!this.showStatus) return;
+
+        const statusDot = this.querySelector('.ai-video-autoplay__status-{{ ai_gen_id }}');
+        if (statusDot) {
+          statusDot.style.backgroundColor = success ? '{{ block.settings.status_color }}' : '{{ block.settings.error_color }}';
+        }
+      }
+
+      updateStatusText(count) {
+        const textElement = this.querySelector('.ai-video-autoplay__text-{{ ai_gen_id }}');
+        if (textElement) {
+          textElement.textContent = count === 1 
+            ? 'Video autoplay enabled' 
+            : count + ' videos autoplay enabled';
+        }
+      }
+    }
+
+    customElements.define('video-autoplay-enabler-{{ ai_gen_id }}', VideoAutoplayEnabler{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Video autoplay enabler",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video targeting"
+    },
+    {
+      "type": "text",
+      "id": "target_selector",
+      "label": "CSS selector",
+      "default": ".hero-banner video, [class*=\"hero\"] video, [class*=\"banner\"] video",
+      "info": "CSS selector to target video elements. Default targets hero and banner videos."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_controls",
+      "label": "Show video controls",
+      "default": false,
+      "info": "Display play/pause controls on videos"
+    },
+    {
+      "type": "header",
+      "content": "Status display"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_status",
+      "label": "Show status message",
+      "default": false,
+      "info": "Display a message indicating autoplay is active"
+    },
+    {
+      "type": "color",
+      "id": "message_bg_color",
+      "label": "Message background",
+      "default": "#1a3c34"
+    },
+    {
+      "type": "color",
+      "id": "message_text_color",
+      "label": "Message text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "status_color",
+      "label": "Active status color",
+      "default": "#3d9970"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Error status color",
+      "default": "#c45c5c"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video autoplay enabler"
+    }
+  ]
+}
+{% endschema %}

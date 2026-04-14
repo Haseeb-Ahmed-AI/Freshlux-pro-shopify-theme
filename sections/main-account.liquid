@@ -1,0 +1,126 @@
+{%- comment -%}
+  Main Account Section
+  Customer account overview
+{%- endcomment -%}
+
+<section class="account-page section">
+  <div class="page-width">
+    <h1 class="account-page__title">{{ 'customer.account.title' | t }}</h1>
+
+    <div class="account-page__grid">
+      <div class="account-page__sidebar">
+        <nav class="account-nav">
+          <a href="{{ routes.account_url }}" class="account-nav__link account-nav__link--active">
+            {{ 'customer.account.orders' | t }}
+          </a>
+          <a href="{{ routes.account_addresses_url }}" class="account-nav__link">
+            {{ 'customer.account.addresses' | t }}
+          </a>
+          <a href="{{ routes.account_logout_url }}" class="account-nav__link">
+            {{ 'customer.account.logout' | t }}
+          </a>
+        </nav>
+      </div>
+
+      <div class="account-page__content">
+        <h2>{{ 'customer.orders.title' | t }}</h2>
+
+        {%- if customer.orders.size > 0 -%}
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>{{ 'customer.orders.order_number' | t }}</th>
+                <th>{{ 'customer.orders.date' | t }}</th>
+                <th>{{ 'customer.orders.payment_status' | t }}</th>
+                <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+                <th>{{ 'customer.orders.total' | t }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for order in customer.orders -%}
+                <tr>
+                  <td><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                  <td>{{ order.created_at | date: "%B %d, %Y" }}</td>
+                  <td>{{ order.financial_status_label }}</td>
+                  <td>{{ order.fulfillment_status_label | default: 'Unfulfilled' }}</td>
+                  <td>{{ order.total_price | money }}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        {%- else -%}
+          <p>{{ 'customer.orders.none' | t }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .account-page__title {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .account-page__grid {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: var(--spacing-2xl);
+  }
+
+  .account-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .account-nav__link {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-foreground);
+    transition: background-color var(--transition-fast);
+  }
+
+  .account-nav__link:hover,
+  .account-nav__link--active {
+    background-color: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+  }
+
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  .orders-table th {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(var(--color-foreground-rgb), 0.6);
+  }
+
+  @media screen and (max-width: 749px) {
+    .account-page__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .account-nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Account",
+  "class": "section-account"
+}
+{% endschema %}

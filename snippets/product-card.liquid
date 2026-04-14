@@ -1,0 +1,205 @@
+{%- comment -%}
+  Product Card – FINAL CLEAN VERSION
+  Desktop: hover-only Add to Cart
+  Mobile/Tablet: static Add to Cart below image
+{%- endcomment -%}
+
+{%- liquid
+  assign show_secondary_image = show_secondary_image | default: settings.show_secondary_image
+  assign show_vendor = show_vendor | default: settings.show_vendor
+  assign show_quick_add = show_quick_add | default: settings.show_quick_add
+  assign lazy_load = lazy_load | default: true
+
+  assign featured_image = product.featured_media
+  assign secondary_image = product.media[1]
+  assign available = product.available
+-%}
+
+<div class="product-card">
+
+  <!-- IMAGE -->
+  <div class="product-card__media">
+    <a href="{{ product.url }}" class="product-card__link">
+      {% if featured_image %}
+        <img
+          src="{{ featured_image | image_url: width: 600 }}"
+          alt="{{ product.title | escape }}"
+          class="product-card__image product-card__image--primary"
+          {% if lazy_load %}loading="lazy"{% endif %}
+        >
+      {% endif %}
+
+      {% if show_secondary_image and secondary_image %}
+        <img
+          src="{{ secondary_image | image_url: width: 600 }}"
+          alt="{{ product.title | escape }}"
+          class="product-card__image product-card__image--secondary"
+          loading="lazy"
+        >
+      {% endif %}
+    </a>
+
+    {% if show_quick_add and available %}
+      <!-- DESKTOP HOVER BUTTON -->
+      <button
+        type="button"
+        class="product-card__quick-add product-card__quick-add--overlay"
+        data-add-to-cart
+        data-variant-id="{{ product.variants.first.id }}"
+      >
+        {% render 'icon-cart' %}
+        <span>{{ 'products.product.add_to_cart' | t }}</span>
+      </button>
+    {% endif %}
+  </div>
+
+  {% if show_quick_add and available %}
+    <!-- MOBILE / TABLET BUTTON -->
+    <button
+      type="button"
+      class="product-card__quick-add product-card__quick-add--static"
+      data-add-to-cart
+      data-variant-id="{{ product.variants.first.id }}"
+    >
+      {% render 'icon-cart' %}
+      <span>{{ 'products.product.add_to_cart' | t }}</span>
+    </button>
+  {% endif %}
+
+  <!-- CONTENT -->
+  <div class="product-card__content">
+    {% if show_vendor %}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {% endif %}
+
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    {% render 'price', product: product %}
+  </div>
+</div>
+
+<style>
+/* =====================
+   BASE
+===================== */
+.product-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card__media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity .3s ease;
+}
+
+.product-card__image--secondary {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+/* IMAGE HOVER */
+@media (hover: hover) {
+  .product-card:hover .product-card__image--primary {
+    opacity: 0;
+  }
+  .product-card:hover .product-card__image--secondary {
+    opacity: 1;
+  }
+}
+
+/* =====================
+   ADD TO CART – SHARED
+===================== */
+.product-card__quick-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: linear-gradient(180deg, #0f3d34, #0b2f29);
+  color: #fff;
+
+  border: none;
+  border-radius: 10px;
+
+  font-weight: 600;
+  font-size: 1.3rem;
+
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.product-card__quick-add svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* =====================
+   DESKTOP (HOVER ONLY)
+===================== */
+.product-card__quick-add--overlay {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+@media (hover: hover) {
+  .product-card:hover .product-card__quick-add--overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================
+   MOBILE / TABLET
+===================== */
+.product-card__quick-add--static {
+  margin: 12px;
+}
+
+/* Hide desktop overlay on touch devices */
+@media (max-width: 989px) {
+  .product-card__quick-add--overlay {
+    display: none;
+  }
+}
+
+/* Hide static button on desktop */
+@media (min-width: 990px) {
+  .product-card__quick-add--static {
+    display: none;
+  }
+}
+
+/* =====================
+   CONTENT
+===================== */
+.product-card__content {
+  padding: 12px;
+}
+
+.product-card__title {
+  font-size: 1.6rem;
+  line-height: 1.3;
+}
+</style>

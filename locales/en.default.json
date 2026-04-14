@@ -1,0 +1,221 @@
+{
+  "general": {
+    "breadcrumbs": {
+      "home": "Home"
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search our store...",
+      "search": "Search",
+      "results_count": "{{ count }} results for \"{{ terms }}\"",
+      "no_results": "No results found for \"{{ terms }}\"",
+      "no_results_suggestions": "Try checking your spelling or using different keywords."
+    },
+    "newsletter": {
+      "email_placeholder": "Enter your email",
+      "subscribe": "Subscribe",
+      "success": "Thank you for subscribing!"
+    },
+    "404": {
+      "title": "Page Not Found",
+      "subtext": "The page you're looking for doesn't exist or has been moved.",
+      "link": "Continue Shopping"
+    },
+    "footer": {
+      "hours": "Store Hours",
+      "rights": "All rights reserved."
+    }
+  },
+  "accessibility": {
+    "skip_to_text": "Skip to content",
+    "menu": "Menu",
+    "search": "Search",
+    "account": "Account",
+    "cart": "Cart",
+    "close": "Close",
+    "main_navigation": "Main navigation"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "unavailable": "Unavailable",
+      "from": "From",
+      "choose_options": "Choose Options",
+      "quick_add": "Quick Add",
+      "quantity": "Quantity",
+      "description": "Description",
+      "in_stock": "In Stock",
+      "out_of_stock": "Out of Stock",
+      "buy_now": "Buy Now",
+      "organic": "Organic",
+      "new": "New",
+      "fresh": "Fresh"
+    }
+  },
+  "collections": {
+    "general": {
+      "title": "Collections",
+      "products_count": "{{ count }} products",
+      "products": "products",
+      "no_matches": "No products found. Try adjusting your filters."
+    },
+    "filters": {
+      "title": "Filters",
+      "clear_all": "Clear All",
+      "from": "From",
+      "to": "To"
+    },
+    "sorting": {
+      "title": "Sort by"
+    }
+  },
+  "sections": {
+    "cart": {
+      "title": "Your Cart",
+      "empty": "Your cart is empty",
+      "continue_shopping": "Continue Shopping",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "taxes_note": "Taxes and shipping calculated at checkout",
+      "checkout": "Checkout",
+      "view_cart": "View Cart",
+      "note": "Order Note",
+      "note_placeholder": "Add a note to your order...",
+      "remove": "Remove",
+      "headings": {
+        "product": "Product",
+        "price": "Price",
+        "quantity": "Quantity",
+        "total": "Total"
+      },
+      "free_shipping_remaining": "Add {{ amount }} more for free shipping!",
+      "free_shipping_success": "You've unlocked free shipping!",
+      "order_summary": "Order Summary",
+      "delivery_scheduler": {
+        "title": "Schedule Delivery",
+        "subtitle": "Choose your preferred delivery date and time",
+        "date": "Select Date",
+        "time": "Select Time Slot"
+      }
+    },
+    "featured_products": {
+      "view_all": "View All Products"
+    },
+    "featured_categories": {
+      "shop_now": "Shop Now",
+      "products": "products"
+    }
+  },
+  "blogs": {
+    "comments": {
+      "title": "Comments",
+      "leave_comment": "Leave a Comment",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "post": "Post Comment"
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "My Account",
+      "orders": "Order History",
+      "addresses": "Addresses",
+      "logout": "Log Out",
+      "return": "Return to Account"
+    },
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "forgot_password": "Forgot your password?",
+      "sign_in": "Sign In",
+      "new_customer": "New customer?",
+      "create_account": "Create an account"
+    },
+    "register": {
+      "title": "Create Account",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create Account",
+      "have_account": "Already have an account?",
+      "login": "Log in"
+    },
+    "recover_password": {
+      "title": "Reset Password",
+      "subtext": "We will send you an email to reset your password.",
+      "email": "Email",
+      "submit": "Submit",
+      "cancel": "Cancel"
+    },
+    "reset_password": {
+      "title": "Reset Account Password",
+      "subtext": "Enter a new password for {{ email }}",
+      "password": "Password",
+      "password_confirm": "Confirm Password",
+      "submit": "Reset Password"
+    },
+    "activate_account": {
+      "title": "Activate Account",
+      "subtext": "Create your password to activate your account.",
+      "password": "Password",
+      "password_confirm": "Confirm Password",
+      "submit": "Activate Account",
+      "cancel": "Decline Invitation"
+    },
+    "orders": {
+      "title": "Order History",
+      "order_number": "Order",
+      "date": "Date",
+      "payment_status": "Payment Status",
+      "fulfillment_status": "Fulfillment Status",
+      "total": "Total",
+      "none": "You haven't placed any orders yet."
+    },
+    "order": {
+      "title": "Order {{ name }}",
+      "date_html": "Placed on {{ date }}",
+      "cancelled_html": "Order Cancelled on {{ date }}",
+      "cancelled_reason": "Reason: {{ reason }}",
+      "product": "Product",
+      "sku": "SKU",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "shipping": "Shipping",
+      "tax": "Tax",
+      "billing_address": "Billing Address",
+      "shipping_address": "Shipping Address",
+      "payment_status": "Payment Status",
+      "fulfillment_status": "Fulfillment Status",
+      "fulfilled_at_html": "Fulfilled {{ date }}",
+      "track_shipment": "Track shipment"
+    },
+    "addresses": {
+      "title": "My Addresses",
+      "add_new": "Add New Address",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "company": "Company",
+      "address1": "Address",
+      "address2": "Apartment, suite, etc.",
+      "city": "City",
+      "country": "Country/Region",
+      "province": "Province",
+      "zip": "Postal/ZIP Code",
+      "phone": "Phone",
+      "set_default": "Set as default address",
+      "add": "Add Address",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "delete_confirm": "Are you sure you want to delete this address?",
+      "default": "Default"
+    }
+  }
+}

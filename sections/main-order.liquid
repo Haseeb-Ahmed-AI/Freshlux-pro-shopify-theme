@@ -1,0 +1,215 @@
+{%- comment -%}
+  Main Order Section
+  Order details page
+{%- endcomment -%}
+
+<section class="order-page section">
+  <div class="page-width">
+    <h1 class="order-page__title">{{ 'customer.order.title' | t: name: order.name }}</h1>
+
+    <p class="order-page__date">{{ 'customer.order.date_html' | t: date: order.created_at | date: "%B %d, %Y %I:%M %p" }}</p>
+
+    {%- if order.cancelled -%}
+      <div class="order-page__cancelled">
+        {%- assign cancelled_at = order.cancelled_at | date: "%B %d, %Y %I:%M %p" -%}
+        <p>{{ 'customer.order.cancelled_html' | t: date: cancelled_at }}</p>
+        <p>{{ 'customer.order.cancelled_reason' | t: reason: order.cancel_reason_label }}</p>
+      </div>
+    {%- endif -%}
+
+    <div class="order-page__grid">
+      <div class="order-page__items">
+        <table class="order-table">
+          <thead>
+            <tr>
+              <th colspan="2">{{ 'customer.order.product' | t }}</th>
+              <th>{{ 'customer.order.sku' | t }}</th>
+              <th>{{ 'customer.order.price' | t }}</th>
+              <th>{{ 'customer.order.quantity' | t }}</th>
+              <th>{{ 'customer.order.total' | t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for line_item in order.line_items -%}
+              <tr>
+                <td class="order-item__image">
+                  {%- if line_item.image -%}
+                    <img src="{{ line_item.image | image_url: width: 100 }}" alt="{{ line_item.title | escape }}" width="50" height="50">
+                  {%- endif -%}
+                </td>
+                <td>
+                  <p>{{ line_item.title }}</p>
+                  {%- if line_item.fulfillment -%}
+                    <p class="order-item__tracking">
+                      {%- assign created_at = line_item.fulfillment.created_at | date: "%b %d" -%}
+                      {{ 'customer.order.fulfilled_at_html' | t: date: created_at }}
+                      {%- if line_item.fulfillment.tracking_url -%}
+                        <a href="{{ line_item.fulfillment.tracking_url }}">{{ 'customer.order.track_shipment' | t }}</a>
+                      {%- endif -%}
+                    </p>
+                  {%- endif -%}
+                </td>
+                <td>{{ line_item.sku }}</td>
+                <td>{{ line_item.original_price | money }}</td>
+                <td>{{ line_item.quantity }}</td>
+                <td>{{ line_item.final_line_price | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5">{{ 'customer.order.subtotal' | t }}</td>
+              <td>{{ order.line_items_subtotal_price | money }}</td>
+            </tr>
+            {%- for discount_application in order.cart_level_discount_applications -%}
+              <tr>
+                <td colspan="5">{{ 'customer.order.discount' | t }}: {{ discount_application.title }}</td>
+                <td>-{{ discount_application.total_allocated_amount | money }}</td>
+              </tr>
+            {%- endfor -%}
+            {%- for shipping_method in order.shipping_methods -%}
+              <tr>
+                <td colspan="5">{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})</td>
+                <td>{{ shipping_method.price | money }}</td>
+              </tr>
+            {%- endfor -%}
+            {%- for tax_line in order.tax_lines -%}
+              <tr>
+                <td colspan="5">{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate_percentage }}%)</td>
+                <td>{{ tax_line.price | money }}</td>
+              </tr>
+            {%- endfor -%}
+            <tr class="order-table__total">
+              <td colspan="5">{{ 'customer.order.total' | t }}</td>
+              <td>{{ order.total_price | money }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="order-page__sidebar">
+        <div class="order-info">
+          <h3>{{ 'customer.order.billing_address' | t }}</h3>
+          <p>{{ 'customer.order.payment_status' | t }}: {{ order.financial_status_label }}</p>
+          {{ order.billing_address | format_address }}
+        </div>
+
+        <div class="order-info">
+          <h3>{{ 'customer.order.shipping_address' | t }}</h3>
+          <p>{{ 'customer.order.fulfillment_status' | t }}: {{ order.fulfillment_status_label | default: 'Unfulfilled' }}</p>
+          {{ order.shipping_address | format_address }}
+        </div>
+      </div>
+    </div>
+
+    <a href="{{ routes.account_url }}" class="order-page__back">
+      {%- render 'icon-arrow-right' -%}
+      {{ 'customer.account.return' | t }}
+    </a>
+  </div>
+</section>
+
+<style>
+  .order-page__title {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .order-page__date {
+    margin: 0 0 var(--spacing-xl);
+    color: rgba(var(--color-foreground-rgb), 0.6);
+  }
+
+  .order-page__cancelled {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    background-color: rgba(var(--color-error), 0.1);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-error);
+  }
+
+  .order-page__grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .order-table th,
+  .order-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  .order-table th {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(var(--color-foreground-rgb), 0.6);
+  }
+
+  .order-item__image img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: var(--border-radius-sm);
+  }
+
+  .order-item__tracking {
+    margin-top: var(--spacing-xs);
+    font-size: 1.3rem;
+    color: rgba(var(--color-foreground-rgb), 0.6);
+  }
+
+  .order-table__total td {
+    font-weight: 600;
+    font-size: 1.8rem;
+  }
+
+  .order-info {
+    padding: var(--spacing-lg);
+    background-color: rgba(var(--color-foreground-rgb), 0.03);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .order-info h3 {
+    margin: 0 0 var(--spacing-sm);
+    font-size: 1.6rem;
+  }
+
+  .order-info p {
+    margin: 0 0 var(--spacing-sm);
+    font-size: 1.4rem;
+  }
+
+  .order-page__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-foreground);
+  }
+
+  .order-page__back svg {
+    transform: rotate(180deg);
+  }
+
+  @media screen and (max-width: 989px) {
+    .order-page__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Order",
+  "class": "section-order"
+}
+{% endschema %}

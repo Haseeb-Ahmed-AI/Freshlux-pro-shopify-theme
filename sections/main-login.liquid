@@ -1,0 +1,121 @@
+{%- comment -%}
+  Main Login Section
+  Customer login form
+{%- endcomment -%}
+
+<section class="login-page section">
+  <div class="page-width">
+    <div class="login-page__wrapper">
+      <div class="login-form">
+        <h1>{{ 'customer.login.title' | t }}</h1>
+
+        {%- form 'customer_login', class: 'login-form__form' -%}
+          {%- if form.errors -%}
+            <div class="form-errors">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <div class="form-group">
+            <label for="CustomerEmail" class="form-label">{{ 'customer.login.email' | t }}</label>
+            <input type="email" id="CustomerEmail" name="customer[email]" class="form-input" autocomplete="email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="CustomerPassword" class="form-label">{{ 'customer.login.password' | t }}</label>
+            <input type="password" id="CustomerPassword" name="customer[password]" class="form-input" autocomplete="current-password" required>
+          </div>
+
+          <a href="#recover" class="login-form__forgot">{{ 'customer.login.forgot_password' | t }}</a>
+
+          <button type="submit" class="button button--primary button--full">{{ 'customer.login.sign_in' | t }}</button>
+        {%- endform -%}
+
+        <p class="login-form__create">
+          {{ 'customer.login.new_customer' | t }}
+          <a href="{{ routes.account_register_url }}">{{ 'customer.login.create_account' | t }}</a>
+        </p>
+      </div>
+
+      <div id="recover" class="recover-form">
+        <h2>{{ 'customer.recover_password.title' | t }}</h2>
+        <p>{{ 'customer.recover_password.subtext' | t }}</p>
+
+        {%- form 'recover_customer_password', class: 'recover-form__form' -%}
+          <div class="form-group">
+            <label for="RecoverEmail" class="form-label">{{ 'customer.recover_password.email' | t }}</label>
+            <input type="email" id="RecoverEmail" name="email" class="form-input" autocomplete="email" required>
+          </div>
+
+          <button type="submit" class="button button--primary button--full">{{ 'customer.recover_password.submit' | t }}</button>
+        {%- endform -%}
+
+        <a href="#" class="recover-form__back" onclick="history.back(); return false;">{{ 'customer.recover_password.cancel' | t }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .login-page__wrapper {
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  .login-form h1,
+  .recover-form h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .login-form__forgot {
+    display: block;
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.4rem;
+    text-align: right;
+  }
+
+  .login-form__create {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+    font-size: 1.4rem;
+  }
+
+  .recover-form {
+    display: none;
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+    margin-top: var(--spacing-xl);
+  }
+
+  .recover-form:target {
+    display: block;
+  }
+
+  .recover-form:target ~ .login-form {
+    display: none;
+  }
+
+  .recover-form__back {
+    display: block;
+    margin-top: var(--spacing-lg);
+    text-align: center;
+    font-size: 1.4rem;
+  }
+
+  .form-errors {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    background-color: rgba(var(--color-error), 0.1);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-error);
+    font-size: 1.4rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Login",
+  "class": "section-login"
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{%- comment -%}
+  Main Activate Account Section
+{%- endcomment -%}
+
+<section class="activate-account-page section">
+  <div class="page-width">
+    <div class="activate-account-page__wrapper">
+      <h1>{{ 'customer.activate_account.title' | t }}</h1>
+      <p>{{ 'customer.activate_account.subtext' | t }}</p>
+
+      {%- form 'activate_customer_password' -%}
+        <div class="form-group">
+          <label for="Password" class="form-label">{{ 'customer.activate_account.password' | t }}</label>
+          <input type="password" id="Password" name="customer[password]" class="form-input" autocomplete="new-password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="PasswordConfirm" class="form-label">{{ 'customer.activate_account.password_confirm' | t }}</label>
+          <input type="password" id="PasswordConfirm" name="customer[password_confirmation]" class="form-input" autocomplete="new-password" required>
+        </div>
+
+        <button type="submit" class="button button--primary button--full">{{ 'customer.activate_account.submit' | t }}</button>
+        <button type="submit" name="decline" class="button button--ghost button--full">{{ 'customer.activate_account.cancel' | t }}</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .activate-account-page__wrapper {
+    max-width: 450px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .activate-account-page__wrapper h1 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .activate-account-page__wrapper p {
+    margin-bottom: var(--spacing-xl);
+    color: rgba(var(--color-foreground-rgb), 0.6);
+  }
+
+  .activate-account-page__wrapper .form-group {
+    text-align: left;
+  }
+
+  .activate-account-page__wrapper .button--ghost {
+    margin-top: var(--spacing-sm);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Activate Account",
+  "class": "section-activate-account"
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{%- comment -%}
+  Quick Add Modal
+  Modal container for quick add product functionality
+{%- endcomment -%}
+
+<div class="overlay" data-quick-add-overlay></div>
+
+<div class="modal quick-add-modal" data-quick-add-modal aria-modal="true" role="dialog" aria-label="{{ 'products.product.quick_add' | t }}">
+  <div class="modal__header">
+    <h2 class="modal__title">{{ 'products.product.quick_add' | t }}</h2>
+    <button type="button" class="modal__close" data-quick-add-close aria-label="{{ 'accessibility.close' | t }}">
+      {%- render 'icon-close' -%}
+    </button>
+  </div>
+  <div class="modal__body" data-quick-add-content>
+    <!-- Content loaded dynamically -->
+  </div>
+</div>
+
+<style>
+  .quick-add-modal {
+    width: 100%;
+    max-width: 800px;
+    padding: 0;
+  }
+
+  .quick-add-modal .modal__body {
+    padding: var(--spacing-lg);
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .quick-add-modal .loading {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .quick-add-modal {
+      max-width: calc(100vw - 32px);
+      max-height: calc(100vh - 32px);
+    }
+  }
+</style>

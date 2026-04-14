@@ -1,0 +1,57 @@
+{%- comment -%}
+  Main 404 Section
+  Page not found display
+{%- endcomment -%}
+
+<section class="not-found-page section">
+  <div class="page-width">
+    <div class="not-found-page__content">
+      <h1 class="not-found-page__title">404</h1>
+      <h2 class="not-found-page__subtitle">{{ 'general.404.title' | t }}</h2>
+      <p class="not-found-page__text">{{ 'general.404.subtext' | t }}</p>
+      <a href="{{ routes.root_url }}" class="button button--primary">
+        {{ 'general.404.link' | t }}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .not-found-page {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .not-found-page__content {
+    text-align: center;
+    max-width: 500px;
+  }
+
+  .not-found-page__title {
+    margin: 0;
+    font-size: clamp(8rem, 20vw, 15rem);
+    line-height: 1;
+    color: var(--color-primary);
+    opacity: 0.2;
+  }
+
+  .not-found-page__subtitle {
+    margin: 0 0 var(--spacing-md);
+    font-size: 2.4rem;
+  }
+
+  .not-found-page__text {
+    margin: 0 0 var(--spacing-xl);
+    font-size: 1.6rem;
+    color: rgba(var(--color-foreground-rgb), 0.6);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "class": "section-404"
+}
+{% endschema %}

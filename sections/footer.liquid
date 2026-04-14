@@ -1,0 +1,546 @@
+{%- comment -%}
+  Footer Section
+  Premium footer with newsletter, links, and social media
+{%- endcomment -%}
+
+<footer class="footer">
+  {%- comment -%} Newsletter Section {%- endcomment -%}
+  {%- if section.settings.show_newsletter -%}
+    <div class="footer__newsletter">
+      <div class="page-width">
+        <div class="footer__newsletter-wrapper">
+          <div class="footer__newsletter-content">
+            <h2 class="footer__newsletter-title">{{ section.settings.newsletter_title }}</h2>
+            <p class="footer__newsletter-text">{{ section.settings.newsletter_text }}</p>
+          </div>
+          <div class="footer__newsletter-form">
+            {%- form 'customer', class: 'newsletter-form' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="newsletter-form__wrapper">
+                <input
+                  type="email"
+                  name="contact[email]"
+                  class="newsletter-form__input"
+                  placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
+                  required
+                  autocomplete="email"
+                >
+                <button type="submit" class="newsletter-form__button button button--secondary">
+                  {{ 'general.newsletter.subscribe' | t }}
+                </button>
+              </div>
+              {%- if form.posted_successfully? -%}
+                <p class="newsletter-form__success">{{ 'general.newsletter.success' | t }}</p>
+              {%- endif -%}
+              {%- if form.errors -%}
+                <p class="newsletter-form__error">{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</p>
+              {%- endif -%}
+            {%- endform -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Main Footer {%- endcomment -%}
+  <div class="footer__main">
+    <div class="page-width">
+      <div class="footer__grid">
+        {%- comment -%} Brand Column {%- endcomment -%}
+        <div class="footer__brand">
+          {%- if settings.logo != blank -%}
+            <img
+              src="{{ settings.logo | image_url: width: settings.logo_width | times: 2 }}"
+              alt="{{ shop.name }}"
+              width="{{ settings.logo_width }}"
+              height="{{ settings.logo_width | divided_by: settings.logo.aspect_ratio }}"
+              loading="lazy"
+            >
+          {%- else -%}
+            <span class="footer__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+          <p class="footer__brand-text">{{ section.settings.brand_text }}</p>
+
+          {%- comment -%} Social Links {%- endcomment -%}
+          <div class="footer__social">
+            {%- if settings.social_facebook_link != blank -%}
+              <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_instagram_link != blank -%}
+              <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_twitter_link != blank -%}
+              <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" aria-label="Twitter">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_youtube_link != blank -%}
+              <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#fff"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_tiktok_link != blank -%}
+              <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" aria-label="TikTok">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- comment -%} Link Columns {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'link_list' -%}
+              <div class="footer__links" {{ block.shopify_attributes }}>
+                <h3 class="footer__links-title">{{ block.settings.heading }}</h3>
+                {%- if block.settings.menu != blank -%}
+                  <ul class="footer__links-list">
+                    {%- for link in block.settings.menu.links -%}
+                      <li>
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {%- comment -%} Contact Column {%- endcomment -%}
+        {%- if section.settings.show_contact -%}
+          <div class="footer__contact">
+            <h3 class="footer__links-title">{{ section.settings.contact_heading }}</h3>
+            <ul class="footer__contact-list">
+              {%- if section.settings.contact_address != blank -%}
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>{{ section.settings.contact_address }}</span>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.contact_phone != blank -%}
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+                  <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.contact_email != blank -%}
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+                </li>
+              {%- endif -%}
+            </ul>
+
+            {%- if section.settings.show_hours -%}
+              <div class="footer__hours">
+                <h4>{{ 'general.footer.hours' | t }}</h4>
+                <p>{{ section.settings.store_hours }}</p>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Footer Bottom {%- endcomment -%}
+  <div class="footer__bottom">
+    <div class="page-width">
+      <div class="footer__bottom-wrapper">
+        <p class="footer__copyright">
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ 'general.footer.rights' | t }}
+        </p>
+
+        {%- if section.settings.show_payment_icons -%}
+          <div class="footer__payment">
+            {%- for type in shop.enabled_payment_types -%}
+              {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-primary);
+    color: #fff;
+  }
+
+  .footer a {
+    color: rgba(255, 255, 255, 0.8);
+    transition: color var(--transition-fast);
+  }
+
+  .footer a:hover {
+    color: var(--color-secondary);
+  }
+
+  /* Newsletter */
+  .footer__newsletter {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .footer__newsletter-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xl);
+  }
+
+  .footer__newsletter-content {
+    flex: 1;
+    min-width: 280px;
+  }
+
+  .footer__newsletter-title {
+    margin: 0 0 var(--spacing-xs);
+    font-size: 2.4rem;
+    color: #fff;
+  }
+
+  .footer__newsletter-text {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .footer__newsletter-form {
+    flex: 1;
+    min-width: 280px;
+    max-width: 500px;
+  }
+
+  .newsletter-form__wrapper {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+
+  .newsletter-form__input {
+    flex-grow: 1;
+    padding: var(--spacing-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-sm);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1.6rem;
+  }
+
+  .newsletter-form__input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .newsletter-form__input:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+  }
+
+  .newsletter-form__button {
+    flex-shrink: 0;
+  }
+
+  .newsletter-form__success {
+    margin: var(--spacing-sm) 0 0;
+    color: var(--color-success);
+    font-size: 1.4rem;
+  }
+
+  .newsletter-form__error {
+    margin: var(--spacing-sm) 0 0;
+    color: var(--color-error);
+    font-size: 1.4rem;
+  }
+
+  /* Main Footer */
+  .footer__main {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-2xl);
+  }
+
+  .footer__brand {
+    grid-column: span 1;
+  }
+
+  @media screen and (min-width: 990px) {
+    .footer__brand {
+      grid-column: span 2;
+    }
+  }
+
+  .footer__logo-text {
+    font-family: var(--font-heading-family);
+    font-size: 2.4rem;
+    color: #fff;
+  }
+
+  .footer__brand-text {
+    margin: var(--spacing-md) 0;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 300px;
+  }
+
+  .footer__social {
+    display: flex;
+    gap: var(--spacing-md);
+  }
+
+  .footer__social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-full);
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .footer__social a:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-foreground);
+  }
+
+  .footer__links-title {
+    margin: 0 0 var(--spacing-lg);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .footer__links-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .footer__links-list a {
+    font-size: 1.4rem;
+  }
+
+  .footer__contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .footer__contact-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .footer__contact-list svg {
+    flex-shrink: 0;
+    color: var(--color-secondary);
+  }
+
+  .footer__hours {
+    margin-top: var(--spacing-lg);
+  }
+
+  .footer__hours h4 {
+    margin: 0 0 var(--spacing-xs);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .footer__hours p {
+    margin: 0;
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.7);
+    white-space: pre-line;
+  }
+
+  /* Footer Bottom */
+  .footer__bottom {
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer__bottom-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+  }
+
+  .footer__copyright {
+    margin: 0;
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .footer__payment {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .footer__payment-icon {
+    height: 24px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 749px) {
+    .footer__newsletter-wrapper {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .newsletter-form__wrapper {
+      flex-direction: column;
+    }
+
+    .footer__bottom-wrapper {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter title",
+      "default": "Join Our Fresh Club"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter text",
+      "default": "Subscribe for exclusive offers, recipes, and early access to new arrivals."
+    },
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_text",
+      "label": "Brand description",
+      "default": "Premium groceries delivered fresh to your door. Quality you can taste, service you can trust."
+    },
+    {
+      "type": "header",
+      "content": "Contact Information"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contact",
+      "label": "Show contact section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Contact heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "textarea",
+      "id": "contact_address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone number"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Email"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hours",
+      "label": "Show store hours",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "store_hours",
+      "label": "Store hours",
+      "default": "Mon - Sat: 8am - 9pm\nSunday: 9am - 6pm"
+    },
+    {
+      "type": "header",
+      "content": "Footer Bottom"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Link List",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Quick Links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list",
+        "settings": {
+          "heading": "Shop"
+        }
+      },
+      {
+        "type": "link_list",
+        "settings": {
+          "heading": "Help"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

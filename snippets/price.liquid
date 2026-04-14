@@ -1,0 +1,103 @@
+{%- comment -%}
+  Price Snippet
+  Renders product price with sale and compare at price support
+
+  Accepts:
+  - product: {Object} Product object
+  - variant: {Object} Variant object (optional, uses first available if not provided)
+  - show_badges: {Boolean} Show price badges
+{%- endcomment -%}
+
+{%- liquid
+  if variant
+    assign target = variant
+  else
+    assign target = product.selected_or_first_available_variant | default: product
+  endif
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price
+  assign available = target.available | default: product.available
+
+  assign on_sale = false
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+
+  assign price_varies = false
+  if product.price_varies
+    assign price_varies = true
+  endif
+-%}
+
+<div class="price{% if on_sale %} price--on-sale{% endif %}{% unless available %} price--sold-out{% endunless %}">
+  {%- if price_varies -%}
+    <span class="price__from">{{ 'products.product.from' | t }}</span>
+  {%- endif -%}
+
+  {%- if on_sale -%}
+    <span class="price__sale" data-price>
+      {{ price | money }}
+    </span>
+    <span class="price__compare" data-compare-price>
+      {{ compare_at_price | money }}
+    </span>
+  {%- else -%}
+    <span class="price__regular" data-price>
+      {{ price | money }}
+    </span>
+  {%- endif -%}
+
+  {%- unless available -%}
+    <span class="price__availability">{{ 'products.product.sold_out' | t }}</span>
+  {%- endunless -%}
+</div>
+
+<style>
+  .price {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .price__from {
+    font-size: 1.4rem;
+    color: rgba(var(--color-foreground-rgb), 0.6);
+  }
+
+  .price__regular {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .price__sale {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-error);
+  }
+
+  .price__compare {
+    font-size: 1.4rem;
+    color: rgba(var(--color-foreground-rgb), 0.5);
+    text-decoration: line-through;
+  }
+
+  .price__availability {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(var(--color-foreground-rgb), 0.5);
+  }
+
+  /* Large price variant for product pages */
+  .price--large .price__regular,
+  .price--large .price__sale {
+    font-size: 2.8rem;
+  }
+
+  .price--large .price__compare {
+    font-size: 1.8rem;
+  }
+</style>

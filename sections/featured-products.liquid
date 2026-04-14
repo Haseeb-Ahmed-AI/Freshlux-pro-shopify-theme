@@ -1,0 +1,348 @@
+{% liquid
+  assign products = collections.all.products
+  assign max_products = 48
+%}
+
+<style>
+.fp-carousel { margin: 4rem 0; }
+
+.fp-header { margin-bottom: 2rem; }
+.fp-subheading {
+  font-size: 1.4rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: #c9a24d;
+  font-weight: 600;
+}
+.fp-heading { font-size: 3rem; }
+.fp-header {
+  text-align: center;
+}
+
+.fp-subheading {
+  font-weight: 700; /* bold */
+}
+
+.fp-heading {
+  font-weight: 700; /* bold */
+}
+
+.fp-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.fp-viewport {
+  overflow: hidden;
+  width: 100%;
+  flex: 1 1 0%;
+  min-width: 0;
+  position: relative;
+}
+
+
+.fp-track {
+  display: flex;
+  width: 100%;
+  transition: transform .45s ease;
+  will-change: transform;
+}
+.fp-track {
+  position: relative;
+  left: 0;
+}
+
+.fp-carousel {
+  overflow-x: hidden;
+}
+
+/* PAGE */
+.fp-page {
+  flex: 0 0 100%;
+  width: 100%;
+  display: grid;
+  gap: 2rem;
+  box-sizing: border-box;
+}
+
+
+/* Desktop 4x4 */
+@media (min-width: 990px) {
+  .fp-page { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Tablet 2x4 */
+@media (min-width: 750px) and (max-width: 989px) {
+  .fp-page { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile 2x2 */
+@media (max-width: 749px) {
+  .fp-page {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .product-card__title { font-size: 1.2rem; }
+  .product-card__price { font-size: 1.1rem; }
+}
+/* Prevent product media from overflowing mobile screens */
+@media (max-width: 767px) {
+
+  /* Ensure main product image containers don’t overflow */
+  .product-single__media,
+  .product-media,
+  .product-single__gallery,
+  .product-single__slider,
+  .product-single__thumbnails {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* All images must shrink to container width */
+  img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* If tables exist in description, let them scroll internally */
+  .product__description table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent any sidebar/main grid overflow */
+  .grid,
+  .grid__item {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+
+/* Arrows */
+.fp-arrow {
+  width: 44px;
+  height: 44px;
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+.fp-prev {
+  left: 0;
+}
+
+.fp-next {
+  right: 0;
+}
+
+
+/* Dots */
+.fp-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  gap: 8px;
+}
+
+.fp-dots button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  border: none;
+}
+/* =========================
+   MOBILE – SLIGHTLY BOLDER TEXT
+   (NO DESKTOP IMPACT)
+========================= */
+@media (max-width: 749px) {
+
+  .category-card__title {
+    font-weight: 1000; /* stronger than desktop */
+  }
+
+  .category-card__subtitle {
+    font-weight: 800;
+  }
+
+  .category-card__cta {
+    font-weight: 800;
+  }
+
+}
+
+.fp-dots button.active { background: #000; }
+/* =========================
+   FIX ADD TO CART OVERLAP
+   MOBILE + TABLET ONLY
+========================= */
+
+/* Tablet */
+@media (max-width: 989px) {
+
+  .product-card {
+    position: relative;
+  }
+
+  .product-card .add-to-cart,
+  .product-card .product-card__add-to-cart,
+  .product-card button[type="submit"] {
+    position: static !important;
+    transform: none !important;
+    margin-top: 0.8rem;
+    width: 100%;
+  }
+
+}
+@media (max-width: 767px) {
+  img, .product__media-item, .product__media-wrapper {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+@media (max-width: 767px) {
+  .product__media-wrapper slider-component .product__media-list {
+    scroll-padding-left: 0 !important;
+  }
+}
+@media (max-width: 767px) {
+  .product__description table, .product__description table tr td {
+    width: 100% !important;
+  }
+}
+/* ===== FIX GRID / SLIDER OVERFLOW PROPERLY ===== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.fp-track,
+.fp-page {
+  width: 100%;
+  max-width: 100%;
+}
+
+.fp-page {
+  box-sizing: border-box;
+}
+
+.fp-page > * {
+  min-width: 0;
+}
+
+.product-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+.product-card__title {
+  word-break: break-word;
+}
+
+</style>
+
+<div class="fp-carousel">
+  <div class="fp-header">
+    <p class="fp-subheading">Handpicked for you</p>
+    <h2 class="fp-heading">Featured Products</h2>
+  </div>
+
+  <div class="fp-wrapper">
+    <button class="fp-arrow fp-prev">‹</button>
+
+    <div class="fp-viewport">
+      <div class="fp-track">
+
+        {% assign count = 0 %}
+        {% for product in products limit: max_products %}
+
+          {% assign mod = count | modulo: 16 %}
+          {% if mod == 0 %}
+            <div class="fp-page">
+          {% endif %}
+
+              {% render 'product-card', product: product, lazy_load: true %}
+
+          {% assign count = count | plus: 1 %}
+          {% assign mod_close = count | modulo: 16 %}
+          {% if mod_close == 0 or forloop.last %}
+            </div>
+          {% endif %}
+
+        {% endfor %}
+
+      </div>
+    </div>
+
+    <button class="fp-arrow fp-next">›</button>
+  </div>
+
+  <div class="fp-dots"></div>
+</div>
+
+<script>
+(() => {
+  const carousel = document.querySelector('.fp-carousel');
+  if (!carousel) return;
+
+  const track = carousel.querySelector('.fp-track');
+  const pages = carousel.querySelectorAll('.fp-page');
+  const dots = carousel.querySelector('.fp-dots');
+  const prev = carousel.querySelector('.fp-prev');
+  const next = carousel.querySelector('.fp-next');
+
+  let index = 0;
+  const total = pages.length;
+
+  function update() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.querySelectorAll('button').forEach((d, i) =>
+      d.classList.toggle('active', i === index)
+    );
+  }
+
+  function buildDots() {
+    dots.innerHTML = '';
+    for (let i = 0; i < total; i++) {
+      const b = document.createElement('button');
+      b.onclick = () => { index = i; update(); };
+      dots.appendChild(b);
+    }
+  }
+
+  prev.onclick = () => {
+    index = Math.max(index - 1, 0);
+    update();
+  };
+
+  next.onclick = () => {
+    index = Math.min(index + 1, total - 1);
+    update();
+  };
+
+  let startX = 0;
+  track.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  track.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (diff > 50) next.click();
+    if (diff < -50) prev.click();
+  });
+
+  buildDots();
+  update();
+})();
+</script>

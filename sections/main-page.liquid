@@ -1,0 +1,32 @@
+{%- comment -%}
+  Main Page Section
+  Standard page content display
+{%- endcomment -%}
+
+<section class="page-content section">
+  <div class="page-width">
+    <h1 class="page-content__title">{{ page.title }}</h1>
+    <div class="page-content__body rte">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-content__title {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+  }
+
+  .page-content__body {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Page Content",
+  "class": "section-page"
+}
+{% endschema %}
