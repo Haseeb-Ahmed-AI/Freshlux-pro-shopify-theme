@@ -1,4 +1,4 @@
-# Freshlux-pro-shopify-theme Modern Shopify Theme for Grocery E-commerce
+# Freshlux-pro-shopify-theme Modern Shopify Theme for Grocery E-commerce:
 Modern, high-performance Shopify theme for grocery e-commerce, built with Liquid, HTML, CSS, and JavaScript. Features responsive design, modular sections, SEO optimization, and fast load times to deliver a seamless shopping experience across devices.
 
 📌 Overview
@@ -23,10 +23,8 @@ REST APIs (Shopify)
 
 ## Demo Video
 Here's a screen recording showing an overall view of the theme and deployment process:
-
 <video width="640" height="360" controls>
-  <source src="Screen Recording/screen_recording.mp4" type="video/mp4">
-  Your browser does not support the video tag.
+  <source src="Screen Recording 2026-04-14 050901.mp4" type="video/mp4">
 </video>
 
 ⚙️ Installation
