@@ -1,7 +1,9 @@
 # Freshlux-pro-shopify-theme Modern Shopify Theme for Grocery E-commerce:
+
 Modern, high-performance Shopify theme for grocery e-commerce, built with Liquid, HTML, CSS, and JavaScript. Features responsive design, modular sections, SEO optimization, and fast load times to deliver a seamless shopping experience across devices.
 
 📌 Overview
+
 FreshLux is a high-performance, fully responsive Shopify theme built for modern grocery e-commerce stores.
 Designed for NexGenix Store, it focuses on clean UI, fast loading, and seamless shopping experience across devices.
 
@@ -22,6 +24,7 @@ Shopify Theme Architecture
 REST APIs (Shopify)
 
 ## Demo Video
+
 Here's a screen recording showing an overall view of the theme and deployment process:
 <video width="640" height="360" controls>
   <source src="Screen Recording 2026-04-14 050901.mp4" type="video/mp4">
@@ -40,6 +43,7 @@ Customize via:
 config/settings_schema.json
 
 📁 Project Structure
+
 assets/        → CSS, JS, images
 config/        → Theme settings
 layout/        → Main layout files
@@ -48,26 +52,30 @@ snippets/      → Small Liquid components
 templates/     → Page templates
 
 🚀 Deployment
+
 Develop locally or via Shopify CLI
 Test on development store
 Deploy via Shopify Theme Upload or GitHub integration
 Publish from Shopify Admin
 
 📈 Performance & Optimization
+
 Minified CSS & JS
 Lazy loading for images
 Optimized Liquid rendering
 Mobile-first design approach
 
 🤝 Contributing
+
 Fork the repository
 Create a new branch
 Commit your changes
 Submit a Pull Request
 
 🔒 License
+
 This project is proprietary. Unauthorized use or distribution is not permitted.
 
 📬 Support
 For support or business inquiries:
-📧 support@nexgenixstore.com
+📧 ha2153329@gmail.com
